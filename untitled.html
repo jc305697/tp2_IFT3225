@@ -4,6 +4,8 @@
 	<meta charset="utf-8">
 	<title></title>
 	<link rel="stylesheet" href="">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script>
 </head>
 <body>
 	
@@ -11,27 +13,27 @@
 	<fieldset>
 		<legend>Options</legend>
 		<label> Url de l'image
-			<input type="url" name="image" value="http://lorempixel.com/700/700">
+			<input type="url" name="image" value="http://lorempixel.com/700/700" id="urlImage"/>
 		</label>
 
 		<label> Nombre de ligne 
-			<input type="number" name="nbLigne" id="nbLigne" value="1">
+			<input type="number" name="nbLigne" id="nbLigne" value="1"/>
 		</label>
 
 		<label> Nombre de colonne
-			<input type="number" name="nbColonne" value="1" id="nbColonne">
+			<input type="number" name="nbColonne" value="1" id="nbColonne"/>
 		</label>
 
 		<label>Afficher les numéros
-			<input type="checkbox" name="afficheNb" id="afficheNb" value="">
+			<input type="checkbox" name="afficheNb" id="afficheNb" value=""/>
 		</label>
 
 		<label>
-			<input type="button" name="affichage" value="Afficher" id="btnAffichage">
+			<input type="button" name="affichage" value="Afficher" id="btnAffichage"/>
 		</label>
 
 		<label>
-			<input type="button" name="brassage" value="Brasser les tuiles" id="btnBrasser">
+			<input type="button" name="brassage" value="Brasser les tuiles" id="btnBrasser"/>
 		</label>
 
 		<h2>Déplacement: 0</h2>
@@ -41,7 +43,7 @@
 	<table>
 		<caption>Puzzle</caption>
 
-		<tbody>
+		<tbody id="debutTbody">
 
 		</tbody>
 	</table>

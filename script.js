@@ -9,17 +9,23 @@ function changeAffNombre(event) {
 }
 
 function affichage(event) {
+    var image = new Image();
+    image.src = $("#urlImage").val();
+
+
+  //  alert("debut tableau");
     var idIncrementCase = 1;
     var idIncrementLigne = 1;
     var caseDansLigne = 0;
     var selecteur = "#debutTbody";
     $(selecteur).empty();
     //https://stackoverflow.com/questions/623172/how-to-get-image-size-height-width-using-javascript
-    var image = new Image();
-    image.src = $("#urlImage").val();
+
+    var adresse = "url(" + image.src+ ")";
     var hauteur = image.height;
     var largeur = image.width;
-    var adresse = "url(\"" + image.src + "\")";
+    console.log("largeur = " + largeur + " hauteur = "+ hauteur);
+
 
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
@@ -34,9 +40,26 @@ function affichage(event) {
             var idColonne = "Colonne" + idIncrementCase++;
             var cellule = "<td> " + (idIncrementCase-1) + " </td>";
             var nouvelleColonne = jQuery(cellule,{id:idColonne});
+
+            //console.log(dimension);
+            nouvelleColonne.css({backgroundImage:adresse});
+            if (hauteur == 0|| largeur == 0){
+                alert("hauteur = "+ hauteur +" largeur = " + largeur);
+            }
+
+            while(hauteur == 0|| largeur == 0){
+                hauteur = image.height;
+                largeur = image.width;
+                console.log("nouvelle largeur = " + largeur + " nouvelle hauteur = "+ hauteur);
+
+               /* setTimeout(function () {
+                },700);*/
+            }
+            largeurCase = largeur/nbColonne;
+            hauteurCase = hauteur/nbLigne;
             var dimension = largeurCase + " "+ hauteurCase;
-            console.log(dimension);
-            nouvelleColonne.css({width:largeurCase, height:hauteurCase,backgroundImage:adresse,"background-size":dimension});
+
+            nouvelleColonne.css({width:largeurCase, height:hauteurCase,"background-size":dimension});
             nouvelleLigne.append(nouvelleColonne);
             var position = nouvelleColonne.position();
             //var decalageGauche =   position.left +"px";
@@ -49,10 +72,15 @@ function affichage(event) {
 
             caseDansLigne++;
         }
+
         $(selecteur).append(nouvelleLigne);
 
     }
 
+
+}
+
+function faitTableau(event) {
 }
 
 function brasse(event) {

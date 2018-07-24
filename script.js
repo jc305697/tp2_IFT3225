@@ -16,7 +16,6 @@ function affichage(event) {
   //  alert("debut tableau");
     var idIncrementCase = 1;
     var idIncrementLigne = 1;
-    var caseDansLigne = 0;
     var selecteur = "#debutTbody";
     $(selecteur).empty();
     //https://stackoverflow.com/questions/623172/how-to-get-image-size-height-width-using-javascript
@@ -33,12 +32,15 @@ function affichage(event) {
     var hauteurCase = hauteur/nbLigne;
 
     for (var i=0;i< nbLigne;i++){
+        //fait les lignes
+        var caseDansLigne = 0;
         var idLigne = "Ligne" + idIncrementLigne++;
         var nouvelleLigne = jQuery("<tr></tr>",{id:idLigne});
 
         for (var j = 0;j< nbColonne;j++){
+            //fait les colonnes
             var idColonne = "Colonne" + idIncrementCase++;
-            var cellule = "<td> " + (idIncrementCase-1) + " </td>";
+            var cellule = "<td> " + (idIncrementCase-1) + " </td>";//crée la case et met le chiffre
             var nouvelleColonne = jQuery(cellule,{id:idColonne});
 
             //console.log(dimension);
@@ -63,10 +65,15 @@ function affichage(event) {
             nouvelleLigne.append(nouvelleColonne);
             var position = nouvelleColonne.position();
             //var decalageGauche =   position.left +"px";
-            var decalageGauche =  (caseDansLigne % nbColonne ) *largeurCase +"px";
+            //var decalageGauche =  (caseDansLigne % nbColonne ) *largeurCase +"px";
+            var decalageGauche =  caseDansLigne *largeurCase +"px";
+            console.log("decalageGauche = " + decalageGauche + " caseDansLigne = " + caseDansLigne + " largeurCase = " + largeurCase);
 
             //var decalageHauteur =  position.top + "px";
-            var decalageHauteur =  ((idIncrementLigne - 2 ) % nbLigne ) *largeurCase +"px";
+            var decalageHauteur =  (idIncrementLigne - 2 )*hauteurCase +"px";
+            //var decalageHauteur =  ((idIncrementLigne - 2) *hauteurCase * 100)/largeur +"%";
+
+            console.log("idIncrementLigne = " + (idIncrementLigne - 2)+ " et decalage Hauteur = " +decalageHauteur + " hauteurCase = " + hauteurCase);
 
             nouvelleColonne.css({"background-position-x":decalageGauche,"background-position-y":decalageHauteur});
 

@@ -124,6 +124,24 @@ function faitTableau(event) {
 }
 
 function brasse(event) {
-    
+
+    var nbLigne = $("#nbLigne").val();
+    var nbColonne = $("#nbColonne").val();
+    var nombreCases = nbLigne * nbColonne;
+
+    //inverse deux tuiles au hasard autant de fois qu'il y a de tuiles en tout
+    for (var k=0;k< nombreCases;k++) {
+
+        var a = Math.floor((Math.random() * nbLigne));
+        var b = Math.floor((Math.random() * nbColonne));
+        var c = Math.floor((Math.random() * nbLigne));
+        var d = Math.floor((Math.random() * nbColonne));
+
+        var numeroA = jeu.rows[a].cells[b].innerHTML;
+        var numeroB = jeu.rows[c].cells[d].innerHTML;
+        jeu.rows[a].cells[b].innerHTML = numeroB;
+        jeu.rows[c].cells[d].innerHTML = numeroA;
+
+    }
 }
 

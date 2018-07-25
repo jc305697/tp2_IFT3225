@@ -54,6 +54,7 @@ function affichage(event) {
     var nbColonne = $("#nbColonne").val();
     var largeurCase = largeur/nbColonne;
     var hauteurCase = hauteur/nbLigne;
+    var caseDansColonne = 0;
 
     for (var i=0;i< nbLigne;i++){
         //fait les lignes
@@ -90,22 +91,22 @@ function affichage(event) {
             var position = nouvelleColonne.position();
             //var decalageGauche =   position.left +"px";
             //var decalageGauche =  (caseDansLigne % nbColonne ) *largeurCase +"px";
-            var decalageGauche =  caseDansLigne *largeurCase +"px";
+            var decalageGauche =  caseDansLigne * largeurCase +"px";
             console.log("decalageGauche = " + decalageGauche + " caseDansLigne = " + caseDansLigne + " largeurCase = " + largeurCase);
 
             //var decalageHauteur =  position.top + "px";
-            var decalageHauteur =  (idIncrementLigne - 2 )*hauteurCase +"px";
+            var decalageHauteur =  caseDansColonne * hauteurCase +"px";
             //var decalageHauteur =  ((idIncrementLigne - 2) *hauteurCase * 100)/largeur +"%";
 
             console.log("idIncrementLigne = " + (idIncrementLigne - 2)+ " et decalage Hauteur = " +decalageHauteur + " hauteurCase = " + hauteurCase);
 
             nouvelleColonne.css({"background-position-x":decalageGauche,"background-position-y":decalageHauteur});
 
-            caseDansLigne++;
+            caseDansLigne--;
         }
 
         $(selecteur).append(nouvelleLigne);
-
+        caseDansColonne--;
     }
     $("td span").css({background:"rgba(255, 255, 255, 0.6)"});
     $("td").click(mouvmentClick);

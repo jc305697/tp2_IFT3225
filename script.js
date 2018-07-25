@@ -19,7 +19,7 @@ function mouvementClavier(event) {
 }
 
 function mouvmentClick(event) {
-
+   // var this.children("span").text();
 }
 
 function changeAffNombre(event) {
@@ -69,7 +69,14 @@ function affichage(event) {
             var nouvelleColonne = jQuery(cellule,{id:idColonne});
 
             //console.log(dimension);
-            nouvelleColonne.css({backgroundImage:adresse});
+            //nouvelleColonne.css({backgroundImage:adresse});
+            if ( i != (nbLigne -1) || j != (nbColonne -1) ){
+                nouvelleColonne.css({"background-image":adresse});
+            }
+            else {
+                nouvelleColonne.css({"background-color":"#808080"});
+            }
+
             if (hauteur == 0|| largeur == 0){
                 alert("hauteur = "+ hauteur +" largeur = " + largeur);
             }

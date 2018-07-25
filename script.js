@@ -2,10 +2,34 @@ $(document).ready(function () {
     $("#afficheNb").change(changeAffNombre);
     $("#btnAffichage").click(affichage);
     $("#btnBrasser").click(brasse);
+    $(document).keydown(mouvementClavier);
 });
 
-function changeAffNombre(event) {
+function mouvementClavier(event) {
+    switch (String.fromCharCode(event.charCode)) {
+        case "ArrowLeft":
+            break;
+        case "ArrowRight":
+            break;
+        case "ArrowUp":
+            break;
+        case "ArrowDown":
+            break;
+    }
+}
 
+function mouvmentClick(event) {
+
+}
+
+function changeAffNombre(event) {
+    if(this.checked){
+        $("td span").show();
+    }
+
+    else{
+        $("td span").hide();
+    }
 }
 
 function affichage(event) {
@@ -40,7 +64,7 @@ function affichage(event) {
         for (var j = 0;j< nbColonne;j++){
             //fait les colonnes
             var idColonne = "Colonne" + idIncrementCase++;
-            var cellule = "<td> " + (idIncrementCase-1) + " </td>";//crée la case et met le chiffre
+            var cellule = "<td> " + "<span>"  + (idIncrementCase-1) + "</span>"+" </td>";//crée la case et met le chiffre
             var nouvelleColonne = jQuery(cellule,{id:idColonne});
 
             //console.log(dimension);
@@ -83,7 +107,8 @@ function affichage(event) {
         $(selecteur).append(nouvelleLigne);
 
     }
-
+    $("td span").css({background:"rgba(255, 255, 255, 0.6)"});
+    $("td").click(mouvmentClick);
 
 }
 

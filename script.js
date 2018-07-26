@@ -55,35 +55,40 @@ function affichage(event) {
     var largeurCase = largeur/nbColonne;
     var hauteurCase = hauteur/nbLigne;
     var caseDansColonne = 0;
+    $("style").empty();
 
     for (var i=0;i< nbLigne;i++){
         //fait les lignes
+        //console.log("i=" +i);
         var caseDansLigne = 0;
         var idLigne = "Ligne" + idIncrementLigne++;
         var nouvelleLigne = jQuery("<tr></tr>",{id:idLigne});
 
         for (var j = 0;j< nbColonne;j++){
+            //console.log("j=" +j);
             //fait les colonnes
-            var idColonne = "Colonne" + idIncrementCase++;
-            var classe = "" + (idIncrementCase-1);
+            var idColonne = "a" + idIncrementCase++;
+            var classe = "a" + (idIncrementCase-1);
             var selectClasse = "." + classe;
             var cellule = "<td> " + "<span>"  + (idIncrementCase-1) + "</span>"+" </td>";//crée la case et met le chiffre
-            var nouvelleColonne = jQuery(cellule,{id:idColonne});
+            var nouvelleColonne = jQuery(cellule);
             nouvelleColonne.addClass(classe);
+            nouvelleColonne.attr("id",idColonne);
 
             //console.log(dimension);
             //nouvelleColonne.css({backgroundImage:adresse});
             if ( i != (nbLigne -1) || j != (nbColonne -1) ){
-               nouvelleColonne.css({"background-image":adresse});
-                //var regle = "background-image:" +adresse;
+               //nouvelleColonne.css({"background-image":adresse});
+                var regle = "background-image:" +adresse;
                 //addCSSRule(style,selectClasse,regle,0);
-
+                //$("style").append(selectClasse + "{" +regle+ ";}");
+                ajoutestyleCSS(selectClasse,regle);
                 //style.insertRule(selectClasse + "{" +regle+ "}");
                 //style.insertRule('.1{color:blue}');
             }
             else {
-                nouvelleColonne.css({"background-color":"#808080"});
-                //style.insertRule(selectClasse + "{" +"background-color: #808080"+ "}");
+                //nouvelleColonne.css({"background-color":"#808080"});
+                ajoutestyleCSS(selectClasse,"background-color:#808080");
 
             }
 
@@ -98,17 +103,19 @@ function affichage(event) {
             }
             largeurCase = largeur/nbColonne;
             hauteurCase = hauteur/nbLigne;
-            var dimension = largeurCase + " "+ hauteurCase;
+            var dimension = largeurCase + "px "+ hauteurCase+"px";
 
-            nouvelleColonne.css({width:largeurCase, height:hauteurCase,"background-size":dimension});
+           // nouvelleColonne.css({width:largeurCase, height:hauteurCase,"background-size":dimension});
+           ajoutestyleCSS(selectClasse,"width:"+largeurCase+"px; height:"+hauteurCase+"px");
             nouvelleLigne.append(nouvelleColonne);
             var decalageGauche =  caseDansLigne * largeurCase +"px";
-            console.log("decalageGauche = " + decalageGauche + " caseDansLigne = " + caseDansLigne + " largeurCase = " + largeurCase);
+            //console.log("decalageGauche = " + decalageGauche + " caseDansLigne = " + caseDansLigne + " largeurCase = " + largeurCase);
 
             var decalageHauteur =  caseDansColonne * hauteurCase +"px";
-            console.log("idIncrementLigne = " + (idIncrementLigne - 2)+ " et decalage Hauteur = " +decalageHauteur + " hauteurCase = " + hauteurCase);
+            //console.log("idIncrementLigne = " + (idIncrementLigne - 2)+ " et decalage Hauteur = " +decalageHauteur + " hauteurCase = " + hauteurCase);
 
-            nouvelleColonne.css({"background-position-x":decalageGauche,"background-position-y":decalageHauteur});
+            //nouvelleColonne.css({"background-position-x":decalageGauche,"background-position-y":decalageHauteur});
+            ajoutestyleCSS(selectClasse,"background-position-x:"+decalageGauche+"; background-position-y:"+decalageHauteur);
 
             caseDansLigne--;
         }
@@ -135,47 +142,34 @@ function faitTableau(event) {
 function actualiseTableau() {
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
-    //var numCase = 1;
-    var tabloStyle=[];
-    var i = 0;
-    while (i< nbLigne*nbColonne){
-        tabloStyle.push("");
-        i++;
-    }
 
-    for (var ligne=0;i< nbLigne;i++){
+    for (var ligne=0;ligne< nbLigne;ligne++){
+        for (var colonne=0;colonne<nbColonne;colonne++){
+            var valeur = tableau2d[ligne][colonne];//valeur represente ce que je veux qui soit la dans mon affichage
+           // console.log("ligne = "+ ligne +" colonne = " + colonne+ " valeur = "+valeur);
+            var selecteurDest = "#a"+ valeur;//selecteurDest va selectionner où je veux mettre ce qui est dans la case numero numercase
 
-        for (var colonne=0;j<nbColonne;j++){
+            var numerCase = numCase(ligne,colonne);
+            //console.log("numerCase = " +numerCase);
 
-            var valeur = tableau2d[ligne][colonne];
-            var selecteurDest = "td."+ valeur;//valeur represente ce que je veux qui soit la dans mon affichage
-            //selecteur va selectionner où je veux mettre la ce qui est dans la case numero numcase
-                //numCase++;
-            var numCase = numCase(ligne,colonne);
-            var selecteurOrigine = "td."+numCase;//selecteur2 va selectionner la classe qui contient ce que je veux mettre dans la case selectionner par selecteur
+            var selecteurOrigine = "#a"+numerCase;//selecteurOrigine va selectionner la classe qui contient ce que je veux mettre dans la case selectionner par selecteur
+            //console.log("selecteurDest = " + selecteurDest + " selecteurOrigine = " + selecteurOrigine);
             var $caseOrigine = $(selecteurOrigine);
-            var classe = "."+ numCase;
-            //$caseOrigine.removeClass($case.attr("class"));
             var $caseDest = $(selecteurDest);
-
-            tabloStyle[valeur-1] = $caseDest.attr("style");
-            if (tabloStyle[numCase-1] == ""){
-                $caseDest.attr("style",$caseOrigine.attr("style"));
+            var classeOrigine = "a"+numerCase;
+            if ($caseOrigine.hasClass(classeOrigine)){
+                $caseOrigine.removeClass(classeOrigine);
             }
-            else {
-                $caseDest.attr("style",tabloStyle[numCase-1]);
-            }
-            //$caseOrigine.removeClass(""+numCase);
-            $caseDest.addClass(""+numCase);
-            $("."+numCase+"."+valeur +"span").empty();
-            $("."+numCase+"."+valeur +"span").text($caseOrigine.children("span").text());
-            //$caseDest.removeClass("")
-
-
-
-
-            var nouvelleClasse = "" + valeur;
-            //$caseOrigine.addClass(nouvelleClasse);
+            $caseDest.removeClass();
+            //console.log("enleve les classes");
+           // console.log("classeOrigine = " + classeOrigine);
+            $caseDest.addClass(classeOrigine);
+            var $spanDest = $("."+classeOrigine +" span");
+            $spanDest.empty();
+            //$spanDest.text($caseOrigine.children("span").text());
+            var numeroCaseAff = classeOrigine.split("a")[1];
+            //console.log("numeroCaseAff = " + numeroCaseAff);
+            $spanDest.text(numeroCaseAff);
         }
     }
 }
@@ -217,6 +211,7 @@ function brasse(event) {
         tableau2DTempo.push(tableauLigne);
     }
     tableau2d = tableau2DTempo;
+    console.log(tableau2d);
     actualiseTableau();
     
 /*
@@ -239,14 +234,8 @@ function nombreAleatoireEntier(min,max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;//https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
 }
 
-function addCSSRule(sheet, selector, rules, index) {//https://davidwalsh.name/add-rules-stylesheets
-    if("insertRule" in sheet) {
-        sheet.insertRule(selector + "{" + rules + "}", index);
-    }
-
-    /*if("addRule" in sheet) {
-        sheet.addRule(selector, rules, index);
-    }*/
+function ajoutestyleCSS(selecteur,regle) {
+    $("style").append(selecteur + "{" +regle+ ";}");
 }
 
 /*function copieTableau2D(tableau) {

@@ -43,6 +43,8 @@ function mouvementClavier(event) {
             console.log("fleche ver bas");
             if (numLigneGris == nbLigne){
                 alert("déplacement impossible");
+            }else {
+                deplacement("bas");
             }
             break;
     }
@@ -54,37 +56,61 @@ function deplacement(direction) {
     var classeGrise = "a" + nbLigne*nbColonne;
     var selectClasseGrise = "." + classeGrise;
     var $caseGrise = $(selectClasseGrise);
+
+    var iemeColonne = (parseInt($caseGrise.attr("id").split("a")[1],10)-1)%nbColonne;
+    //if (iemeColonne==0){
+     //   iemeColonne=nbColonne;
+    //}
     switch (direction) {
         case "haut":
-            var iemeColonne = parseInt($caseGrise.attr("id").split("a")[1],10)%nbColonne;
-            if (iemeColonne==0){
-                iemeColonne=nbColonne;
-            }
-            //console.log("numLigneGris = "+ numLigneGris +" " + "numColonneGris = "+numColonneGris );
-            //console.log("iemeColonne = " + iemeColonne);
-           // console.log(tableauPositionCase);
-            //console.log(""+tableauPositionCase[numLigneGris-2][iemeColonne-1]);
-            //console.log(tableauPositionCase[numLigneGris-2]);
-            var numeroCaseDansDest = tableauPositionCase[numLigneGris-2][iemeColonne-1];
-            console.log("numeroCaseDansDest = "+ numeroCaseDansDest);
+            var numeroCaseDansDest = tableauPositionCase[numLigneGris-2][iemeColonne];
             var classeDest = "a" + numeroCaseDansDest;
             var selectClasseDest = "." +classeDest;
             var $caseDest = $(selectClasseDest);
+
+            //enleve les classes pour éviter d'avoir 2 classes sur une case
             $caseDest.removeClass();
             $caseGrise.removeClass();
+
+            //echange les classes pour echanger les backgrounds
             $caseDest.addClass(classeGrise);
             $caseGrise.addClass(classeDest);
-            console.log("classeDest = " + classeDest);
-            console.log(" classeGrise = " +classeGrise);
+
+            //met a jour mon tableau de position
             tableauPositionCase[numLigneGris-2][iemeColonne] = nbLigne*nbColonne;
             tableauPositionCase[numLigneGris-1][numColonneGris-1]= numeroCaseDansDest;
+            //met a jour le contenu des cases
+            $caseGrise.children("span").empty();
+            $caseGrise.children("span").text(""+numeroCaseDansDest);
+            $caseDest.children("span").empty();
+            $caseDest.children("span").text(""+nbLigne*nbColonne);
+
+            miseAJourPosGris();
+            break;
+        case "bas":
+            var numeroCaseDansDest = tableauPositionCase[numLigneGris][iemeColonne];
+            console.log("numeroCaseDansDest = " + numeroCaseDansDest);
+            var classeDest = "a" + numeroCaseDansDest;
+            var selectClasseDest = "." +classeDest;
+            var $caseDest = $(selectClasseDest);
+
+            //enleve les classes pour éviter d'avoir 2 classes sur une case
+            $caseDest.removeClass();
+            $caseGrise.removeClass();
+
+            //echange les classes pour echanger les backgrounds
+            $caseDest.addClass(classeGrise);
+            $caseGrise.addClass(classeDest);
+
+            //met a jour mon tableau de position
+            tableauPositionCase[numLigneGris][iemeColonne] = nbLigne*nbColonne;
+            tableauPositionCase[numLigneGris-1][numColonneGris-1]= numeroCaseDansDest;
+            //met a jour le contenu des cases
             $caseGrise.children("span").empty();
             $caseGrise.children("span").text(""+numeroCaseDansDest);
             $caseDest.children("span").empty();
             $caseDest.children("span").text(""+nbLigne*nbColonne);
             miseAJourPosGris();
-            break;
-        case "bas":
             break;
         case "gauche":
             break;

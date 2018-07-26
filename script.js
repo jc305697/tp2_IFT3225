@@ -3,17 +3,92 @@ $(document).ready(function () {
     $("#btnAffichage").click(affichage);
     $("#btnBrasser").click(brasse);
     $(document).keydown(mouvementClavier);
+    //document.addEventListener("keydown",mouvementClavier);
 });
 var tableau2d;
+var tableauPositionCase;
+var numLigneGris;
+var numColonneGris;
 function mouvementClavier(event) {
-    switch (String.fromCharCode(event.charCode)) {
-        case "ArrowLeft":
+    var nbLigne = $("#nbLigne").val();
+    var nbColonne = $("#nbColonne").val();
+    console.log(""+String.fromCharCode(event.keyCode));
+    //switch (String.fromCharCode(event.charCode)) {
+    switch (event.keyCode) {
+//        case "ArrowLeft":
+        case 37:
+            console.log("fleche ver gauche");
+            if (numColonneGris == 1){
+                alert("déplacement impossible");
+            }
             break;
-        case "ArrowRight":
+       // case "ArrowRight":
+        case 39:
+            console.log("fleche ver droite");
+            if (numColonneGris==nbColonne){
+                alert("déplacement impossible");
+            }
             break;
-        case "ArrowUp":
+        //case "ArrowUp":
+        case 38:
+            console.log("fleche ver haut");
+            if (numLigneGris == 1){
+                alert("déplacement impossible");
+            }else {
+                deplacement("haut");
+            }
             break;
-        case "ArrowDown":
+        //case "ArrowDown":
+        case 40:
+            console.log("fleche ver bas");
+            if (numLigneGris == nbLigne){
+                alert("déplacement impossible");
+            }
+            break;
+    }
+}
+
+function deplacement(direction) {
+    var nbLigne = $("#nbLigne").val();
+    var nbColonne = $("#nbColonne").val();
+    var classeGrise = "a" + nbLigne*nbColonne;
+    var selectClasseGrise = "." + classeGrise;
+    var $caseGrise = $(selectClasseGrise);
+    switch (direction) {
+        case "haut":
+            var iemeColonne = parseInt($caseGrise.attr("id").split("a")[1],10)%nbColonne;
+            if (iemeColonne==0){
+                iemeColonne=nbColonne;
+            }
+            //console.log("numLigneGris = "+ numLigneGris +" " + "numColonneGris = "+numColonneGris );
+            //console.log("iemeColonne = " + iemeColonne);
+           // console.log(tableauPositionCase);
+            //console.log(""+tableauPositionCase[numLigneGris-2][iemeColonne-1]);
+            //console.log(tableauPositionCase[numLigneGris-2]);
+            var numeroCaseDansDest = tableauPositionCase[numLigneGris-2][iemeColonne-1];
+            console.log("numeroCaseDansDest = "+ numeroCaseDansDest);
+            var classeDest = "a" + numeroCaseDansDest;
+            var selectClasseDest = "." +classeDest;
+            var $caseDest = $(selectClasseDest);
+            $caseDest.removeClass();
+            $caseGrise.removeClass();
+            $caseDest.addClass(classeGrise);
+            $caseGrise.addClass(classeDest);
+            console.log("classeDest = " + classeDest);
+            console.log(" classeGrise = " +classeGrise);
+            tableauPositionCase[numLigneGris-2][iemeColonne] = nbLigne*nbColonne;
+            tableauPositionCase[numLigneGris-1][numColonneGris-1]= numeroCaseDansDest;
+            $caseGrise.children("span").empty();
+            $caseGrise.children("span").text(""+numeroCaseDansDest);
+            $caseDest.children("span").empty();
+            $caseDest.children("span").text(""+nbLigne*nbColonne);
+            miseAJourPosGris();
+            break;
+        case "bas":
+            break;
+        case "gauche":
+            break;
+        case "droite":
             break;
     }
 }
@@ -35,6 +110,23 @@ function changeAffNombre(event) {
 function affichage(event) {
     var image = new Image();
     image.src = $("#urlImage").val();
+    var nbLigne = $("#nbLigne").val();
+    var nbColonne = $("#nbColonne").val();
+
+    numColonneGris = nbColonne;
+    numLigneGris = nbLigne;
+    var numeroCase = 1;
+    var tableauCase = [];
+    for (var ligne = 0; ligne<nbLigne;ligne++){
+        var tableauLigne = [];
+        for (var colonne = 0; colonne<nbColonne;colonne++){
+            tableauLigne.push(numeroCase);
+            numeroCase++;
+        }
+        tableauCase.push(tableauLigne);
+    }
+    tableauPositionCase = tableauCase;
+
 
   //  alert("debut tableau");
     var style = document.styleSheets[0];
@@ -50,8 +142,7 @@ function affichage(event) {
     var largeur = image.width;
     console.log("largeur = " + largeur + " hauteur = "+ hauteur);
 
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
+
     var largeurCase = largeur/nbColonne;
     var hauteurCase = hauteur/nbLigne;
     var caseDansColonne = 0;
@@ -167,11 +258,16 @@ function actualiseTableau() {
             var $spanDest = $("."+classeOrigine +" span");
             $spanDest.empty();
             //$spanDest.text($caseOrigine.children("span").text());
-            var numeroCaseAff = classeOrigine.split("a")[1];
-            //console.log("numeroCaseAff = " + numeroCaseAff);
-            $spanDest.text(numeroCaseAff);
+            var numeroCaseAffiche = classeOrigine.split("a")[1];
+            //console.log("numeroCaseAffiche = " + numeroCaseAffiche + "autre = " + classeOrigine.split("a")[0]);
+            $spanDest.text(numeroCaseAffiche);
+            var numLigne = numeroAxe(valeur,"ligne");
+            var numColonne = numeroAxe(valeur,"colonne");
+            tableauPositionCase[numLigne][numColonne]=numerCase;
         }
     }
+    miseAJourPosGris();
+
 }
 
 function numCase(ligne,colonne) {
@@ -211,7 +307,7 @@ function brasse(event) {
         tableau2DTempo.push(tableauLigne);
     }
     tableau2d = tableau2DTempo;
-    console.log(tableau2d);
+    //console.log(tableau2d);
     actualiseTableau();
     
 /*
@@ -237,6 +333,18 @@ function nombreAleatoireEntier(min,max) {
 function ajoutestyleCSS(selecteur,regle) {
     $("style").append(selecteur + "{" +regle+ ";}");
 }
+function miseAJourPosGris() {
+    var nbLigne = $("#nbLigne").val();
+    var nbColonne = $("#nbColonne").val();
+    var numCaseGris = nbLigne*nbColonne;
+    for (var ligne=0;ligne<nbLigne;ligne++){
+        if (tableauPositionCase[ligne].indexOf(numCaseGris) != -1) {
+            numLigneGris = ligne + 1;
+            numColonneGris = tableauPositionCase[ligne].indexOf(numCaseGris) + 1;
+            console.log("numLigneGris = " + numLigneGris + " numColonneGris = "+numColonneGris);
+        }
+    }
+}
 
 /*function copieTableau2D(tableau) {
     var copieTableau=[];
@@ -249,7 +357,7 @@ function ajoutestyleCSS(selecteur,regle) {
     }
     return copieTableau;
 }
-
+*/
 function numeroAxe(nombre,axe) {
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
@@ -271,5 +379,5 @@ function numeroAxe(nombre,axe) {
             }
         }
     }
-}*/
+}
 

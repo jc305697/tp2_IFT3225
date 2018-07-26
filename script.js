@@ -1,37 +1,49 @@
 $(document).ready(function () {
+    imageDummy.src= $("#urlImage").val();
     $("#afficheNb").change(changeAffNombre);
     $("#btnAffichage").click(affichage);
     $("#btnBrasser").click(brasse);
     $(document).keydown(mouvementClavier);
+    $("#urlImage").change(imageChange);
     //document.addEventListener("keydown",mouvementClavier);
 });
+var imageDummy = new Image();
+
 var tableau2d;
 var tableauPositionCase;
 var numLigneGris;
 var numColonneGris;
 var nbDeplacement = 0;
+function imageChange(event) {
+    imageDummy.src = $("#urlImage").val();
+}
 function mouvementClavier(event) {
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
     console.log(""+String.fromCharCode(event.keyCode));
     //switch (String.fromCharCode(event.charCode)) {
+    var bonnecle = false;
     switch (event.keyCode) {
 //        case "ArrowLeft":
         case 37:
+
             console.log("fleche ver gauche");
             if (numColonneGris == 1){
                 alert("déplacement impossible");
             }else{
                 deplacement("gauche");
+                bonnecle = true;
             }
             break;
        // case "ArrowRight":
         case 39:
+
             console.log("fleche ver droite");
             if (numColonneGris==nbColonne){
                 alert("déplacement impossible");
             }else {
                 deplacement("droite");
+                bonnecle = true;
             }
             break;
         //case "ArrowUp":
@@ -41,6 +53,7 @@ function mouvementClavier(event) {
                 alert("déplacement impossible");
             }else {
                 deplacement("haut");
+                bonnecle = true;
             }
             break;
         //case "ArrowDown":
@@ -50,10 +63,14 @@ function mouvementClavier(event) {
                 alert("déplacement impossible");
             }else {
                 deplacement("bas");
+                bonnecle = true;
             }
             break;
     }
-    victoire();
+    if (bonnecle){
+        victoire();
+    }
+
 }
 
 function victoire() {
@@ -221,8 +238,8 @@ function changeAffNombre(event) {
 }
 
 function affichage(event) {
-    var image = new Image();
-    image.src = $("#urlImage").val();
+    //var image = new Image();
+    //image.src = $("#urlImage").val();
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
 
@@ -250,9 +267,9 @@ function affichage(event) {
     $(selecteur).empty();
     //https://stackoverflow.com/questions/623172/how-to-get-image-size-height-width-using-javascript
 
-    var adresse = "url(" + image.src+ ")";
-    var hauteur = image.height;
-    var largeur = image.width;
+    var adresse = "url(" + imageDummy.src+ ")";
+    var hauteur = imageDummy.height;
+    var largeur = imageDummy.width;
     console.log("largeur = " + largeur + " hauteur = "+ hauteur);
 
 
@@ -302,8 +319,8 @@ function affichage(event) {
             }
 
             while(hauteur == 0|| largeur == 0){
-                hauteur = image.height;
-                largeur = image.width;
+                hauteur = imageDummy.height;
+                largeur = imageDummy.width;
                 console.log("nouvelle largeur = " + largeur + " nouvelle hauteur = "+ hauteur);
             }
             largeurCase = largeur/nbColonne;

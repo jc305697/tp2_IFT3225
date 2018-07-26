@@ -9,6 +9,7 @@ var tableau2d;
 var tableauPositionCase;
 var numLigneGris;
 var numColonneGris;
+var nbDeplacement = 0;
 function mouvementClavier(event) {
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
@@ -20,6 +21,8 @@ function mouvementClavier(event) {
             console.log("fleche ver gauche");
             if (numColonneGris == 1){
                 alert("déplacement impossible");
+            }else{
+                deplacement("gauche");
             }
             break;
        // case "ArrowRight":
@@ -27,6 +30,8 @@ function mouvementClavier(event) {
             console.log("fleche ver droite");
             if (numColonneGris==nbColonne){
                 alert("déplacement impossible");
+            }else {
+                deplacement("droite");
             }
             break;
         //case "ArrowUp":
@@ -48,9 +53,42 @@ function mouvementClavier(event) {
             }
             break;
     }
+    victoire();
+}
+
+function victoire() {
+    var tableauSucces =[];
+    var nbLigne = $("#nbLigne").val();
+    var nbColonne = $("#nbColonne").val();
+    $("td").each(function (index) {
+            //if (this.attr("id") == this.attr("class")){
+        if (this.id == this.className){
+
+            tableauSucces.push(true);
+            }
+            else {
+                tableauSucces.push(false);
+            }
+
+    });
+    var accummulateur = 0;
+    if (tableauSucces.length == nbColonne * nbLigne){
+        tableauSucces.forEach(function (item) {
+            if (item == true){
+                accummulateur++;
+            }
+        });
+        if (accummulateur==tableauSucces.length){
+            alert("vous avez gagné en " + nbDeplacement +"déplacements" );
+        }
+    }
+    else {
+        alert("erreur systeme tableau de mauvaise longueur");
+    }
 }
 
 function deplacement(direction) {
+    nbDeplacement++;
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
     var classeGrise = "a" + nbLigne*nbColonne;
@@ -89,7 +127,7 @@ function deplacement(direction) {
             break;
         case "bas":
             var numeroCaseDansDest = tableauPositionCase[numLigneGris][iemeColonne];
-            console.log("numeroCaseDansDest = " + numeroCaseDansDest);
+            //console.log("numeroCaseDansDest = " + numeroCaseDansDest);
             var classeDest = "a" + numeroCaseDansDest;
             var selectClasseDest = "." +classeDest;
             var $caseDest = $(selectClasseDest);
@@ -113,10 +151,59 @@ function deplacement(direction) {
             miseAJourPosGris();
             break;
         case "gauche":
+            var numeroCaseDansDest = tableauPositionCase[numLigneGris-1][iemeColonne-1];
+            console.log("numeroCaseDansDest = " + numeroCaseDansDest);
+            var classeDest = "a" + numeroCaseDansDest;
+            var selectClasseDest = "." +classeDest;
+            var $caseDest = $(selectClasseDest);
+
+            //enleve les classes pour éviter d'avoir 2 classes sur une case
+            $caseDest.removeClass();
+            $caseGrise.removeClass();
+
+            //echange les classes pour echanger les backgrounds
+            $caseDest.addClass(classeGrise);
+            $caseGrise.addClass(classeDest);
+
+            //met a jour mon tableau de position
+            tableauPositionCase[numLigneGris-1][iemeColonne-1] = nbLigne*nbColonne;
+            tableauPositionCase[numLigneGris-1][numColonneGris-1]= numeroCaseDansDest;
+            //met a jour le contenu des cases
+            $caseGrise.children("span").empty();
+            $caseGrise.children("span").text(""+numeroCaseDansDest);
+            $caseDest.children("span").empty();
+            $caseDest.children("span").text(""+nbLigne*nbColonne);
+            miseAJourPosGris();
+            break;
             break;
         case "droite":
+            var numeroCaseDansDest = tableauPositionCase[numLigneGris-1][iemeColonne+1];
+            //console.log("numeroCaseDansDest = " + numeroCaseDansDest);
+            var classeDest = "a" + numeroCaseDansDest;
+            var selectClasseDest = "." +classeDest;
+            var $caseDest = $(selectClasseDest);
+
+            //enleve les classes pour éviter d'avoir 2 classes sur une case
+            $caseDest.removeClass();
+            $caseGrise.removeClass();
+
+            //echange les classes pour echanger les backgrounds
+            $caseDest.addClass(classeGrise);
+            $caseGrise.addClass(classeDest);
+
+            //met a jour mon tableau de position
+            tableauPositionCase[numLigneGris-1][iemeColonne+1] = nbLigne*nbColonne;
+            tableauPositionCase[numLigneGris-1][numColonneGris-1]= numeroCaseDansDest;
+            //met a jour le contenu des cases
+            $caseGrise.children("span").empty();
+            $caseGrise.children("span").text(""+numeroCaseDansDest);
+            $caseDest.children("span").empty();
+            $caseDest.children("span").text(""+nbLigne*nbColonne);
+            miseAJourPosGris();
             break;
     }
+    $("#deplacement").empty();
+    $("#deplacement").text(""+nbDeplacement);
 }
 
 function mouvmentClick(event) {
@@ -199,9 +286,10 @@ function affichage(event) {
                 var regle = "background-image:" +adresse;
                 //addCSSRule(style,selectClasse,regle,0);
                 //$("style").append(selectClasse + "{" +regle+ ";}");
-                ajoutestyleCSS(selectClasse,regle);
                 //style.insertRule(selectClasse + "{" +regle+ "}");
                 //style.insertRule('.1{color:blue}');
+                ajoutestyleCSS(selectClasse,regle);
+
             }
             else {
                 //nouvelleColonne.css({"background-color":"#808080"});

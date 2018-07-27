@@ -95,7 +95,7 @@ function victoire() {
             }
         });
         if (accummulateur==tableauSucces.length){
-            alert("vous avez gagné en " + nbDeplacement +"déplacements" );
+            alert("vous avez gagné en " + nbDeplacement +" déplacements" );
         }
     }
     else {
@@ -233,12 +233,12 @@ function mouvmentClick(event) {
         iemeColonne = nbColonne;
     }
     var iemeligne  = (parseInt($(this).parent().attr("id").split("Ligne")[1],10)+1) ;
-    var differenceLigne = iemeligne-numLigneGris;
+    var differenceLigne = iemeligne-numLigneGris-1;
     var differenceColonne = iemeColonne - numColonneGris;
+    console.log("differenceLigne = "+ differenceLigne + " "+"differenceColonne = " + differenceColonne );
     if(Math.abs(differenceColonne) > 1 || Math.abs(differenceLigne)>1){
         alert("mouvement illegal");
     }
-
     else {
         if ((differenceLigne == -1) && (differenceColonne == 0)){
             mouvementValide = true;

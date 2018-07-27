@@ -1,0 +1,15 @@
+/* Jeremy Coulombe et Charles-Frédéric Amringer*/
+table caption{
+    text-align: center;
+}
+input{
+    margin: 5px;
+    padding: 3px;
+}
+html{
+    background-color: #ccffff;
+}
+
+form{
+    background-color: #b3ffff;
+}

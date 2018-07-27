@@ -1,14 +1,16 @@
 $(document).ready(function () {
+    //Jeremy Coulombe et Charles-Frédéric Amringer
     imageDummy.src= $("#urlImage").val();
     $("#afficheNb").change(changeAffNombre);
     $("#btnAffichage").click(affichage);
     $("#btnBrasser").click(brasse);
     $(document).keydown(mouvementClavier);
     $("#urlImage").change(imageChange);
-    //document.addEventListener("keydown",mouvementClavier);
-});
-var imageDummy = new Image();
 
+});
+var imageDummy = new Image();//permet chargement de l'image
+var nbLigne;
+var nbColonne;
 var tableau2d;
 var tableauPositionCase;
 var numLigneGris;
@@ -75,8 +77,6 @@ function mouvementClavier(event) {
 
 function victoire() {
     var tableauSucces =[];
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
     $("td").each(function (index) {
             //if (this.attr("id") == this.attr("class")){
         if (this.id == this.className){
@@ -105,8 +105,6 @@ function victoire() {
 
 function deplacement(direction) {
     nbDeplacement++;
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
     var classeGrise = "a" + nbLigne*nbColonne;
     var selectClasseGrise = "." + classeGrise;
     var $caseGrise = $(selectClasseGrise);
@@ -225,8 +223,6 @@ function deplacement(direction) {
 function mouvmentClick(event) {
    // var this.children("span").text();
     //$(this).
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
     var iemeColonne = parseInt($(this).attr("id").split("a")[1],10)%nbColonne;
     var mouvementValide = false;
     if (iemeColonne==0){
@@ -304,12 +300,10 @@ function changeAffNombre(event) {
 }
 
 function affichage(event) {
-    //var image = new Image();
-    //image.src = $("#urlImage").val();
     $("#deplacement").empty();
     $("#deplacement").text(""+0);
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
+     nbLigne = $("#nbLigne").val();
+     nbColonne = $("#nbColonne").val();
 
     numColonneGris = nbColonne;
     numLigneGris = nbLigne;
@@ -325,22 +319,13 @@ function affichage(event) {
     }
     tableauPositionCase = tableauCase;
 
-
-  //  alert("debut tableau");
-    var style = document.styleSheets[0];
-    console.log(style);
     var idIncrementCase = 1;
     var idIncrementLigne = 1;
     var selecteur = "#debutTbody";
     $(selecteur).empty();
-    //https://stackoverflow.com/questions/623172/how-to-get-image-size-height-width-using-javascript
-
     var adresse = "url(" + imageDummy.src+ ")";
-    var hauteur = imageDummy.height;
+    var hauteur = imageDummy.height;//https://stackoverflow.com/questions/623172/how-to-get-image-size-height-width-using-javascript
     var largeur = imageDummy.width;
-    console.log("largeur = " + largeur + " hauteur = "+ hauteur);
-
-
     var largeurCase = largeur/nbColonne;
     var hauteurCase = hauteur/nbLigne;
     var caseDansColonne = 0;
@@ -348,13 +333,11 @@ function affichage(event) {
 
     for (var i=0;i< nbLigne;i++){
         //fait les lignes
-        //console.log("i=" +i);
         var caseDansLigne = 0;
         var idLigne = "Ligne" + idIncrementLigne++;
         var nouvelleLigne = jQuery("<tr></tr>",{id:idLigne});
 
         for (var j = 0;j< nbColonne;j++){
-            //console.log("j=" +j);
             //fait les colonnes
             var idColonne = "a" + idIncrementCase++;
             var classe = "a" + (idIncrementCase-1);
@@ -364,22 +347,13 @@ function affichage(event) {
             nouvelleColonne.addClass(classe);
             nouvelleColonne.attr("id",idColonne);
 
-            //console.log(dimension);
-            //nouvelleColonne.css({backgroundImage:adresse});
-            if ( i != (nbLigne -1) || j != (nbColonne -1) ){
-               //nouvelleColonne.css({"background-image":adresse});
+            if ( i != (nbLigne -1) || j != (nbColonne -1) || (nbColonne==1 && nbLigne == 1)){
                 var regle = "background-image:" +adresse;
-                //addCSSRule(style,selectClasse,regle,0);
-                //$("style").append(selectClasse + "{" +regle+ ";}");
-                //style.insertRule(selectClasse + "{" +regle+ "}");
-                //style.insertRule('.1{color:blue}');
                 ajoutestyleCSS(selectClasse,regle);
 
             }
             else {
-                //nouvelleColonne.css({"background-color":"#808080"});
                 ajoutestyleCSS(selectClasse,"background-color:#808080");
-
             }
 
             if (hauteur == 0|| largeur == 0){
@@ -395,29 +369,18 @@ function affichage(event) {
             hauteurCase = hauteur/nbLigne;
             var dimension = largeurCase + "px "+ hauteurCase+"px";
 
-           // nouvelleColonne.css({width:largeurCase, height:hauteurCase,"background-size":dimension});
            ajoutestyleCSS(selectClasse,"width:"+largeurCase+"px; height:"+hauteurCase+"px");
             nouvelleLigne.append(nouvelleColonne);
             var decalageGauche =  caseDansLigne * largeurCase +"px";
-            //console.log("decalageGauche = " + decalageGauche + " caseDansLigne = " + caseDansLigne + " largeurCase = " + largeurCase);
 
             var decalageHauteur =  caseDansColonne * hauteurCase +"px";
-            //console.log("idIncrementLigne = " + (idIncrementLigne - 2)+ " et decalage Hauteur = " +decalageHauteur + " hauteurCase = " + hauteurCase);
 
-            //nouvelleColonne.css({"background-position-x":decalageGauche,"background-position-y":decalageHauteur});
             ajoutestyleCSS(selectClasse,"background-position-x:"+decalageGauche+"; background-position-y:"+decalageHauteur);
 
             caseDansLigne--;
         }
 
         $(selecteur).append(nouvelleLigne);
-        /*var selecteurLigne = "#"+ idLigne + " td";
-        $(selecteurLigne).each(function () {
-            var classe = this.attr("class")
-            var selectClass = "."+classe;
-            $(selectClass).css(this.attr)
-        })*/
-
 
         caseDansColonne--;
     }
@@ -426,24 +389,18 @@ function affichage(event) {
 
 }
 
-function faitTableau(event) {
-}
-
 function actualiseTableau() {
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
 
     for (var ligne=0;ligne< nbLigne;ligne++){
         for (var colonne=0;colonne<nbColonne;colonne++){
             var valeur = tableau2d[ligne][colonne];//valeur represente ce que je veux qui soit la dans mon affichage
-           // console.log("ligne = "+ ligne +" colonne = " + colonne+ " valeur = "+valeur);
+
             var selecteurDest = "#a"+ valeur;//selecteurDest va selectionner où je veux mettre ce qui est dans la case numero numercase
 
             var numerCase = numCase(ligne,colonne);
-            //console.log("numerCase = " +numerCase);
 
             var selecteurOrigine = "#a"+numerCase;//selecteurOrigine va selectionner la classe qui contient ce que je veux mettre dans la case selectionner par selecteur
-            //console.log("selecteurDest = " + selecteurDest + " selecteurOrigine = " + selecteurOrigine);
+
             var $caseOrigine = $(selecteurOrigine);
             var $caseDest = $(selecteurDest);
             var classeOrigine = "a"+numerCase;
@@ -451,14 +408,12 @@ function actualiseTableau() {
                 $caseOrigine.removeClass(classeOrigine);
             }
             $caseDest.removeClass();
-            //console.log("enleve les classes");
-           // console.log("classeOrigine = " + classeOrigine);
+
             $caseDest.addClass(classeOrigine);
             var $spanDest = $("."+classeOrigine +" span");
             $spanDest.empty();
-            //$spanDest.text($caseOrigine.children("span").text());
+
             var numeroCaseAffiche = classeOrigine.split("a")[1];
-            //console.log("numeroCaseAffiche = " + numeroCaseAffiche + "autre = " + classeOrigine.split("a")[0]);
             $spanDest.text(numeroCaseAffiche);
             var numLigne = numeroAxe(valeur,"ligne");
             var numColonne = numeroAxe(valeur,"colonne");
@@ -470,8 +425,6 @@ function actualiseTableau() {
 }
 
 function numCase(ligne,colonne) {
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
     var accumulateur = 0;
     for (var i = 0; i<nbLigne; i++){
         for (var j = 0; j<nbColonne;j++){
@@ -483,13 +436,8 @@ function numCase(ligne,colonne) {
     }
 }
 function brasse(event) {
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
     var produit = nbColonne*nbLigne;
     var tableauNombreChoisi =[];
-    /*for (var i=0;i< produit;i++){
-        //while ()
-    }*/
 
     var tableau2DTempo=[];
     for (var i=0;i< nbLigne;i++){
@@ -506,23 +454,8 @@ function brasse(event) {
         tableau2DTempo.push(tableauLigne);
     }
     tableau2d = tableau2DTempo;
-    //console.log(tableau2d);
+
     actualiseTableau();
-    
-/*
-    var copieTableau = copieTableau2D(tableau2DTempo);
-    var numcase = 1;
-    for (var ligne = 0; ligne < nbLigne; ligne++ ){
-        for (var colonne = 0 ; colonne < nbColonne; nbColonne++){
-            var valeur = tableau2DTempo[ligne][colonne];
-            var numeroLigne = numeroAxe(valeur,"ligne");
-            var numeroColonne = numeroAxe(valeur,"colonne");
-            copieTableau[numeroLigne][numeroColonne] = numcase;
-            numcase++;
-        }
-    }
-    tableau2d = copieTableau;*/
-    //tableau2d[]
 }
 
 function nombreAleatoireEntier(min,max) {
@@ -533,8 +466,6 @@ function ajoutestyleCSS(selecteur,regle) {
     $("style").append(selecteur + "{" +regle+ ";}");
 }
 function miseAJourPosGris() {
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
     var numCaseGris = nbLigne*nbColonne;
     for (var ligne=0;ligne<nbLigne;ligne++){
         if (tableauPositionCase[ligne].indexOf(numCaseGris) != -1) {
@@ -545,21 +476,7 @@ function miseAJourPosGris() {
     }
 }
 
-/*function copieTableau2D(tableau) {
-    var copieTableau=[];
-    for (var i=0; i<tableau.length;i++){
-        var copieLigne=[];
-        for (var j = 0 ; j < tableau[i].length;j++){
-            copieLigne.push(tableau[i][j]);
-        }
-        copieTableau.push(copieLigne);
-    }
-    return copieTableau;
-}
-*/
 function numeroAxe(nombre,axe) {
-    var nbLigne = $("#nbLigne").val();
-    var nbColonne = $("#nbColonne").val();
     var accumulateur = 0;
     for (var i = 0; i<nbLigne; i++){
         for (var j = 0; j<nbColonne;j++){

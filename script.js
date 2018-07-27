@@ -80,12 +80,11 @@ function victoire() {
     $("td").each(function (index) {
             //if (this.attr("id") == this.attr("class")){
         if (this.id == this.className){
-
             tableauSucces.push(true);
-            }
-            else {
-                tableauSucces.push(false);
-            }
+        }
+        else {
+            tableauSucces.push(false);
+        }
 
     });
     var accummulateur = 0;
@@ -225,6 +224,73 @@ function deplacement(direction) {
 
 function mouvmentClick(event) {
    // var this.children("span").text();
+    //$(this).
+    var nbLigne = $("#nbLigne").val();
+    var nbColonne = $("#nbColonne").val();
+    var iemeColonne = parseInt($(this).attr("id").split("a")[1],10)%nbColonne;
+    var mouvementValide = false;
+    if (iemeColonne==0){
+        iemeColonne = nbColonne;
+    }
+    var iemeligne  = (parseInt($(this).parent().attr("id").split("Ligne")[1],10)+1) ;
+    var differenceLigne = iemeligne-numLigneGris;
+    var differenceColonne = iemeColonne - numColonneGris;
+    if(Math.abs(differenceColonne) > 1 || Math.abs(differenceLigne)>1){
+        alert("mouvement illegal");
+    }
+
+    else {
+        if ((differenceLigne == -1) && (differenceColonne == 0)){
+            mouvementValide = true;
+            deplacement("haut");
+        }
+        else if((differenceLigne == 1) && (differenceColonne == 0)){
+            mouvementValide = true;
+            deplacement("bas");
+        }
+        else if ((differenceLigne == 0 ) && (differenceColonne == 1)){
+            mouvementValide = true;
+            deplacement("droite");
+        }
+        else if ((differenceLigne == 0) && (differenceColonne == -1)){
+            mouvementValide = true;
+            deplacement("gauche");
+        }
+        else {
+            alert("deplacement illegal")
+        }
+        if (mouvementValide){
+            victoire();
+        }
+    }
+
+
+
+    /*var numeroCaseDansDest = tableauPositionCase[numLigneGris-2][numColonneGris];
+    var classeDest = "a" + numeroCaseDansDest;
+    var selectClasseDest = "." +classeDest;
+    var $caseDest = $(selectClasseDest);
+
+    //enleve les classes pour éviter d'avoir 2 classes sur une case
+    $caseDest.removeClass();
+    $caseGrise.removeClass();
+
+    //echange les classes pour echanger les backgrounds
+    $caseDest.addClass(classeGrise);
+    $caseGrise.addClass(classeDest);
+
+    //met a jour mon tableau de position
+    tableauPositionCase[numLigneGris-2][iemeColonne] = nbLigne*nbColonne;
+    tableauPositionCase[numLigneGris-1][numColonneGris-1]= numeroCaseDansDest;
+    //met a jour le contenu des cases
+    $caseGrise.children("span").empty();
+    $caseGrise.children("span").text(""+numeroCaseDansDest);
+    $caseDest.children("span").empty();
+    $caseDest.children("span").text(""+nbLigne*nbColonne);
+
+    miseAJourPosGris();*/
+
+
 }
 
 function changeAffNombre(event) {
@@ -419,9 +485,9 @@ function brasse(event) {
     var nbColonne = $("#nbColonne").val();
     var produit = nbColonne*nbLigne;
     var tableauNombreChoisi =[];
-    for (var i=0;i< produit;i++){
+    /*for (var i=0;i< produit;i++){
         //while ()
-    }
+    }*/
 
     var tableau2DTempo=[];
     for (var i=0;i< nbLigne;i++){

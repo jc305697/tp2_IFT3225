@@ -306,6 +306,8 @@ function changeAffNombre(event) {
 function affichage(event) {
     //var image = new Image();
     //image.src = $("#urlImage").val();
+    $("#deplacement").empty();
+    $("#deplacement").text(""+0);
     var nbLigne = $("#nbLigne").val();
     var nbColonne = $("#nbColonne").val();
 
